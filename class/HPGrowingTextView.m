@@ -114,6 +114,13 @@
 
     [self setPlaceholderColor:[UIColor lightGrayColor]];
     internalTextView.displayPlaceHolder = YES;
+    
+	r.origin.y = 0;
+	r.origin.x = contentInset.left;
+    r.size.width -= contentInset.left + contentInset.right;
+    
+    internalTextView.frame = r;
+
 }
 
 -(CGSize)sizeThatFits:(CGSize)size
@@ -122,18 +129,6 @@
         size.height = minHeight;
     }
     return size;
-}
-
--(void)layoutSubviews
-{
-    [super layoutSubviews];
-    
-	CGRect r = self.bounds;
-	r.origin.y = 0;
-	r.origin.x = contentInset.left;
-    r.size.width -= contentInset.left + contentInset.right;
-    
-    internalTextView.frame = r;
 }
 
 -(void)setContentInset:(UIEdgeInsets)inset
@@ -288,10 +283,10 @@
 		if (newSizeH <= maxHeight)
 		{
             if(animateHeightChange) {
-                
+
                 if ([UIView resolveClassMethod:@selector(animateWithDuration:animations:)]) {
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
-                    [UIView animateWithDuration:animationDuration 
+//#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
+                    [UIView animateWithDuration:animationDuration
                                           delay:0 
                                         options:(UIViewAnimationOptionAllowUserInteraction|
                                                  UIViewAnimationOptionBeginFromCurrentState)                                 
@@ -303,7 +298,7 @@
                                              [delegate growingTextView:self didChangeHeight:newSizeH];
                                          }
                                      }];
-#endif
+//#endif
                 } else {
                     [UIView beginAnimations:@"" context:nil];
                     [UIView setAnimationDuration:animationDuration];
@@ -378,8 +373,7 @@
     
     internalTextViewFrame.origin.y = contentInset.top - contentInset.bottom;
     internalTextViewFrame.origin.x = contentInset.left;
-    
-    if(!CGRectEqualToRect(internalTextView.frame, internalTextViewFrame)) internalTextView.frame = internalTextViewFrame;
+    if(!CGRectEqualToRect(internalTextView.frame, internalTextViewFrame)) self.internalTextView.frame = internalTextViewFrame;
 }
 
 - (void)growDidStop
